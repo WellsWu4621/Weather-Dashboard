@@ -3,8 +3,12 @@
   margin-right: auto;
   font-size: 35px;
 }
-.container-sm{
+.mainCard{
   margin-top: 20px;
+  margin-bottom: 20px;
+}
+body{
+  background-color: darkgrey;
 }
 #UVText{
   font-size: medium;
