@@ -31,10 +31,14 @@ const Display = (userSearch) =>{
       
       // Store Search History Function
       let resultName = res.data.name
+      // history = JSON.parse(localStorage.getItem('history')) || []
       history.push({resultName})
       localStorage.setItem('history', JSON.stringify(history))
       // push Search History
       document.getElementById('searchHist').innerHTML = ''
+      if (history.length > 20) {
+        history.shift()
+      }
       for (let h = history.length-1; h > -1; h--) {
         document.getElementById('searchHist').innerHTML+=`
         <button type="button" class="list-group-item list-group-item-action" data-val="${history[h].resultName}">${history[h].resultName}</button>
@@ -62,8 +66,8 @@ const Display = (userSearch) =>{
       }
 
       // Forecast Loop
-      for (let i = 1; i < 7; i++) {
-        cityBasic(`day-${i-1}`,
+      for (let i = 0; i < 6; i++) {
+        cityBasic(`day-${i}`,
         `
         <div class="card">
         <div class="card-body">
@@ -79,8 +83,11 @@ const Display = (userSearch) =>{
       }
       document.getElementById('citySearch').value = ''
     })
+    .catch(err => console.error(err))
   })
+  .catch(err => console.error(err))
 }
+
 // event from Search button
 document.getElementById('submit').addEventListener('click', event => {
     event.preventDefault()
@@ -91,7 +98,20 @@ document.getElementById('submit').addEventListener('click', event => {
 document.addEventListener('click', event => {
   if (event.target.classList.contains('list-group-item')) {
     let histVal = event.target.getAttribute('data-val')
+
     Display(histVal)
+
+  }
+})
+
+// Clear history
+document.getElementById('clearHistory').addEventListener('click', event => {
+  event.preventDefault()
+  let clearH = confirm('Are you sure you want to clear your history?')
+  if (clearH) {
+    localStorage.removeItem('history')
+    document.getElementById('searchHist').innerHTML = ""
+    history = []
   }
 })
 
